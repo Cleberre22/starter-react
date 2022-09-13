@@ -1,17 +1,14 @@
 import React from 'react';
 import MenuHeader from "../components/auth/MenuHeader";
-import RegisterForm from "../components/auth/RegisterForm";
+import LoginForm from "../components/auth/LoginForm";
 
-const Register = () => {
-
- 
-
+const Login = () => {
     return (
         <div>
             <MenuHeader />
-            <RegisterForm />
+            <LoginForm />
         </div>
     );
 };
 
-export default Register;
+export default Login;

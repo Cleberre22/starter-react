@@ -1,6 +1,6 @@
 @font-face {
-  font-family: "font-1";
-  src: url(../assets/fonts/Oswald-VariableFont_wght.ttf);
+  // font-family: "font-1";
+  // src: url(../assets/fonts/Oswald-VariableFont_wght.ttf);
 }
 
 
@@ -22,10 +22,12 @@ $white: rgb(243, 243, 243);
 }
 
 body {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
   background: $color-1;
   font-family: "JosefinSans-Medium";
   color: $color-3;
-  @include verticalCenter;
 }
 
 li {

@@ -1,17 +1,13 @@
 import React from 'react';
 import MenuHeader from "../components/auth/MenuHeader";
-import RegisterForm from "../components/auth/RegisterForm";
 
-const Register = () => {
-
- 
-
+const Home = () => {
     return (
         <div>
             <MenuHeader />
-            <RegisterForm />
+            <h1>Page d'accueil</h1>
         </div>
     );
 };
 
-export default Register;
+export default Home;

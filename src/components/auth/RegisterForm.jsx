@@ -17,11 +17,18 @@ import { GroupSharp } from "@mui/icons-material";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Input from "@mui/material/Input";
+// import TextField from '@mui/material/TextField';
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
 
 const theme = createTheme();
 
 export default function SignUp() {
-
   const navigate = useNavigate();
 
   const {
@@ -29,7 +36,7 @@ export default function SignUp() {
     watch,
     control,
     handleSubmit,
-    formState: { errors, isDirty, isValid },
+    formState: { errors, isDirty, isValid, isSubmitSuccessful },
   } = useForm({ mode: "onChange" });
   const onSubmit = (data) => console.log(data);
 
@@ -37,6 +44,23 @@ export default function SignUp() {
   const password = watch("password", "");
   const lastName = watch("lastName", "");
   const firstName = watch("firstName", "");
+
+  const [values, setValues] = React.useState({
+    amount: "",
+    password: "",
+    weight: "",
+    weightRange: "",
+    showPassword: false,
+  });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => {
+    if (!showPassword) {
+      setShowPassword(true);
+    } else {
+      setShowPassword(false);
+    }
+  };
 
   const [validationError, setValidationError] = useState({});
 
@@ -82,30 +106,28 @@ export default function SignUp() {
           </Typography>
           <Box component="form" noValidate onSubmit={Register} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-
               <Grid item xs={12} sm={6}>
                 <TextField
                   {...register("firstName", {
                     required: true,
                     maxLength: {
                       value: 20,
-                      message: "Longueur minimale de 8 caractères",
+                      message: "Longueur maximale de 20 caractères",
                     },
                   })}
                   required
                   fullWidth
                   id="firstName"
                   label="Prénom"
-                  autoFocus
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   {...register("lastName", {
-                    required: "Longueur minimale de 8 caractèrefbfs",
+                    required: true,
                     maxLength: {
-                      value:20,
-                      message: "Longueur minimale de 8 caractères nom famille",
+                      value: 20,
+                      message: "Longueur maximale de 20 caractères",
                     },
                   })}
                   required
@@ -116,7 +138,11 @@ export default function SignUp() {
                 />
               </Grid>
               {errors.firstName ? (
-                <Alert sx={{ mt: 2, p: 0, pl: 2 }} severity="error">
+                <Alert
+                  className="errorsMessage"
+                  sx={{ mt: 2, p: 0, pl: 2 }}
+                  severity="error"
+                >
                   {errors.firstName?.message}
                 </Alert>
               ) : (
@@ -146,55 +172,68 @@ export default function SignUp() {
                 />
               </Grid>
               {errors.email ? (
-                <Alert sx={{ mt: 2, p: 0, pl: 2 }} severity="error">
+                <Alert
+                  className="errorsMessage"
+                  sx={{ mt: 2, p: 0, pl: 2 }}
+                  severity="error"
+                >
                   {errors.email?.message}
                 </Alert>
               ) : (
                 ""
               )}
 
+              {/* ----------------------------------------------------------------------------------------------- *** PASSWORD *** ------------------------------------------- */}
               <Grid item xs={12}>
-                <TextField
-                  {...register("password", {
-                    required: "Ce champ est requis",
-                    minLength: {
-                      value: 5,
-                      message: "Longueur minimale de 5 caractères",
-                    },
-                    pattern: {
-                      value:
-                        /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#:$%^&])/,
-                      message:
-                        "Le mot de passe doit contenir une minuscule, une majuscule, un chiffre et un caractère spéciale",
-                    },
-                  })}
-                  required
-                  fullWidth
-                  name="password"
-                  label="Votre mot de passe"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
+                <FormControl sx={{ mt: 1, width: "100%" }} variant="outlined">
+                  <InputLabel htmlFor="outlined-adornment-password">
+                    Password
+                  </InputLabel>
+                  <OutlinedInput
+                    {...register("password", {
+                      required: "Ce champ est requis",
+                      minLength: {
+                        value: 5,
+                        message: "Longueur minimale de 5 caractères",
+                      },
+                      pattern: {
+                        value:
+                          /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#:$%^&])/,
+                        message:
+                          "Le mot de passe doit contenir une minuscule, une majuscule, un chiffre et un caractère spéciale",
+                      },
+                    })}
+                    id="outlined-adornment-password"
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    label="Password"
+                    endAdornment={
+                      <InputAdornment position="end" sx={{ color: "inherit" }}>
+                        <IconButton
+                          color="inherit"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={(e) => e.preventDefault()}
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
               </Grid>
               {errors.password ? (
-                <Alert sx={{ mt: 2, p: 0, pl: 2 }} severity="error">
+                <Alert
+                  className="errorsMessage"
+                  sx={{ mt: 2, p: 0, pl: 2 }}
+                  severity="error"
+                >
                   {errors.password?.message}
                 </Alert>
               ) : (
                 ""
               )}
-
-              {/* <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
-                  }
-                  label="Accepter les RGPD"
-                />
-              </Grid> */}
             </Grid>
-            
+
             <Button
               type="submit"
               fullWidth
@@ -206,13 +245,12 @@ export default function SignUp() {
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link href="#" variant="body2">
-                Vous avez déjà un compte ? Connectez-vous 
+                  Vous avez déjà un compte ? Connectez-vous
                 </Link>
               </Grid>
             </Grid>
           </Box>
         </Box>
-        
       </Container>
     </ThemeProvider>
   );

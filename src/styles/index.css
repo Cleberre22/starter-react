@@ -21,4 +21,8 @@ li {
 a:-webkit-any-link {
   text-decoration: none;
   cursor: pointer;
+}
+
+.errorsMessage {
+  color: red;
 }/*# sourceMappingURL=index.css.map */

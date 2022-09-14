@@ -56,7 +56,7 @@ const ResponsiveAppBar = () => {
               textDecoration: "none",
             }}
           >
-            DESCKTOP LOGO
+            DESCKTOP
           </Typography>
 
           {/* -------------------------------------------------------------------- MENU MOBILE */}
@@ -91,15 +91,15 @@ const ResponsiveAppBar = () => {
             >
               {/* {pages.map((page) => ( */}
               <MenuItem onClick={handleCloseNavMenu}>
-                <Typography textAlign="center" component="a" href="/home">
-                  Mobile
+                <Typography textAlign="center" component="a" href="/dashboard/index">
+                  Dashboard
                 </Typography>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
-                <Typography textAlign="center" component="a" href="/login">Login</Typography>
+                <Typography textAlign="center" component="a" href="/login">Connexion</Typography>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
-                <Typography textAlign="center" component="a" href="/register">Register</Typography>
+                <Typography textAlign="center" component="a" href="/register">Inscription</Typography>
               </MenuItem>
               {/* ))} */}
             </Menu>
@@ -123,7 +123,7 @@ const ResponsiveAppBar = () => {
               textDecoration: "none",
             }}
           >
-            MOBILE LOGO
+            MOBILE
           </Typography>
 
           {/* -------------------------------------------------------------------- MENU DESCKTOP */}
@@ -131,10 +131,12 @@ const ResponsiveAppBar = () => {
             {/* {pages.map((page) => ( */}
             <Button
               // key={page}
+              component="a" 
+              href="/dashboard/index"
               onClick={handleCloseNavMenu}
               sx={{ my: 2, color: "white", display: "block" }}
             >
-              DESCKTOP
+              Dashboard
             </Button>
             <Button
               // key={page}
@@ -143,7 +145,7 @@ const ResponsiveAppBar = () => {
               onClick={handleCloseNavMenu}
               sx={{ my: 2, color: "white", display: "block" }}
             >
-              Login
+              Connexion
             </Button>
             <Button
               // key={page}
@@ -152,7 +154,7 @@ const ResponsiveAppBar = () => {
               onClick={handleCloseNavMenu}
               sx={{ my: 2, color: "white", display: "block" }}
             >
-              Register
+              Inscription
             </Button>
             {/* ))} */}
           </Box>

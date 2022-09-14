@@ -42,16 +42,16 @@ export default function SignUp() {
 
   const email = watch("email", "");
   const password = watch("password", "");
-  const lastName = watch("lastName", "");
-  const firstName = watch("firstName", "");
+  // const lastName = watch("lastName", "");
+  // const firstName = watch("firstName", "");
 
-  const [values, setValues] = React.useState({
-    amount: "",
-    password: "",
-    weight: "",
-    weightRange: "",
-    showPassword: false,
-  });
+  // const [values, setValues] = React.useState({
+  //   amount: "",
+  //   password: "",
+  //   weight: "",
+  //   weightRange: "",
+  //   showPassword: false,
+  // });
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
@@ -100,7 +100,7 @@ export default function SignUp() {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit(login)} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              {/* <Grid item xs={12} sm={6}>
                 <TextField
                   {...register("firstName", {
                     required: true,
@@ -114,8 +114,8 @@ export default function SignUp() {
                   id="firstName"
                   label="Prénom"
                 />
-              </Grid>
-              <Grid item xs={12} sm={6}>
+              </Grid> */}
+              {/* <Grid item xs={12} sm={6}>
                 <TextField
                   {...register("lastName", {
                     required: true,
@@ -130,8 +130,8 @@ export default function SignUp() {
                   label="Nom"
                   autoFocus
                 />
-              </Grid>
-              {errors.firstName ? (
+              </Grid> */}
+              {/* {errors.firstName ? (
                 <Alert
                   className="errorsMessage"
                   sx={{ mt: 2, p: 0, pl: 2 }}
@@ -148,7 +148,7 @@ export default function SignUp() {
                 </Alert>
               ) : (
                 ""
-              )}
+              )} */}
 
               <Grid item xs={12}>
                 <TextField

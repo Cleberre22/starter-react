@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -13,12 +13,15 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 
+import { useNavigate } from "react-router-dom";
+
 // const pages = ["Login", "Register"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+// const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -33,6 +36,16 @@ const ResponsiveAppBar = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const token = localStorage.getItem("access_token");
+  console.log(token);
+  const userLogged = !token;
+
+  const removeToken = () => {
+    localStorage.removeItem("access_token");
+    //   setIsLoggedin(false);
+    navigate("/home");
   };
 
   return (
@@ -91,15 +104,33 @@ const ResponsiveAppBar = () => {
             >
               {/* {pages.map((page) => ( */}
               <MenuItem onClick={handleCloseNavMenu}>
-                <Typography textAlign="center" component="a" href="/dashboard/index">
+                <Typography
+                  textAlign="center"
+                  component="a"
+                  href="/dashboard/index"
+                >
                   Dashboard
                 </Typography>
               </MenuItem>
+
+              {userLogged ? (
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center" component="a" href="/login">
+                    Connexion
+                  </Typography>
+                </MenuItem>
+              ) : (
+                <MenuItem onClick={removeToken}>
+                  <Typography textAlign="center">
+                    Deconnexion
+                  </Typography>
+                </MenuItem>
+              )}
+
               <MenuItem onClick={handleCloseNavMenu}>
-                <Typography textAlign="center" component="a" href="/login">Connexion</Typography>
-              </MenuItem>
-              <MenuItem onClick={handleCloseNavMenu}>
-                <Typography textAlign="center" component="a" href="/register">Inscription</Typography>
+                <Typography textAlign="center" component="a" href="/register">
+                  Inscription
+                </Typography>
               </MenuItem>
               {/* ))} */}
             </Menu>
@@ -131,25 +162,17 @@ const ResponsiveAppBar = () => {
             {/* {pages.map((page) => ( */}
             <Button
               // key={page}
-              component="a" 
+              component="a"
               href="/dashboard/index"
               onClick={handleCloseNavMenu}
               sx={{ my: 2, color: "white", display: "block" }}
             >
               Dashboard
             </Button>
+
             <Button
               // key={page}
-              component="a" 
-              href="/login"
-              onClick={handleCloseNavMenu}
-              sx={{ my: 2, color: "white", display: "block" }}
-            >
-              Connexion
-            </Button>
-            <Button
-              // key={page}
-              component="a" 
+              component="a"
               href="/register"
               onClick={handleCloseNavMenu}
               sx={{ my: 2, color: "white", display: "block" }}
@@ -157,12 +180,33 @@ const ResponsiveAppBar = () => {
               Inscription
             </Button>
             {/* ))} */}
+
+            {userLogged ? (
+              <Button
+                // key={page}
+                component="a"
+                href="/login"
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                Connexion
+              </Button>
+            ) : (
+              <Button
+                // key={page}
+                component="a"
+                onClick={removeToken}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                déconnection
+              </Button>
+            )}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="Remy Sharp" src="onePiece.png" />
               </IconButton>
             </Tooltip>
             <Menu
@@ -181,11 +225,30 @@ const ResponsiveAppBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+              {/* {settings.map((setting) => ( */}
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">Profil</Typography>
+              </MenuItem>
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">Compte</Typography>
+              </MenuItem>
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">Dashboard</Typography>
+              </MenuItem>
+              {userLogged ? (
+                <MenuItem
+                  component="a"
+                  href="/login"
+                  onClick={handleCloseUserMenu}
+                >
+                  <Typography textAlign="center">Connexion</Typography>
                 </MenuItem>
-              ))}
+              ) : (
+                <MenuItem onClick={removeToken}>
+                  <Typography textAlign="center">Deconnection</Typography>
+                </MenuItem>
+              )}
+              {/* ))} */}
             </Menu>
           </Box>
         </Toolbar>

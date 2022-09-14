@@ -7,8 +7,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -20,8 +18,6 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
-import Input from "@mui/material/Input";
-// import TextField from '@mui/material/TextField';
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -45,13 +41,13 @@ export default function SignUp() {
   const lastName = watch("lastName", "");
   const firstName = watch("firstName", "");
 
-  const [values, setValues] = React.useState({
-    amount: "",
-    password: "",
-    weight: "",
-    weightRange: "",
-    showPassword: false,
-  });
+  // const [values, setValues] = React.useState({
+  //   amount: "",
+  //   password: "",
+  //   weight: "",
+  //   weightRange: "",
+  //   showPassword: false,
+  // });
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
@@ -78,7 +74,8 @@ export default function SignUp() {
 
     await axios
       .post(`http://localhost:8000/api/register`, formData)
-      // .then(navigate("/home"))
+      .then(navigate("/home"))
+      // .then(navigate(-1))
       .catch(({ response }) => {
         if (response.status === 422) {
           setValidationError(response.data.errors);
@@ -112,7 +109,7 @@ export default function SignUp() {
                     required: true,
                     maxLength: {
                       value: 20,
-                      message: "Longueur maximale de 20 caractères",
+                      message: "Prénom: Longueur maximale de 20 caractères",
                     },
                   })}
                   required
@@ -127,7 +124,7 @@ export default function SignUp() {
                     required: true,
                     maxLength: {
                       value: 20,
-                      message: "Longueur maximale de 20 caractères",
+                      message: "Nom: Longueur maximale de 20 caractères",
                     },
                   })}
                   required
@@ -149,7 +146,9 @@ export default function SignUp() {
                 ""
               )}
               {errors.lastName ? (
-                <Alert sx={{ mt: 2, p: 0, pl: 2 }} severity="error">
+                <Alert
+                className="errorsMessage"
+                sx={{ mt: 2, p: 0, pl: 2 }} severity="error">
                   {errors.lastName?.message}
                 </Alert>
               ) : (

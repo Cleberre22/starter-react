@@ -17,87 +17,68 @@ import { GroupSharp } from "@mui/icons-material";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Input from "@mui/material/Input";
+// import TextField from '@mui/material/TextField';
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
 
 const theme = createTheme();
 
-export default function Login() {
-
+export default function SignUp() {
   const navigate = useNavigate();
 
   const {
-    login,
+    register,
     watch,
     control,
     handleSubmit,
-    formState: { errors, isDirty, isValid },
+    formState: { errors, isDirty, isValid, isSubmitSuccessful },
   } = useForm({ mode: "onChange" });
   const onSubmit = (data) => console.log(data);
 
   const email = watch("email", "");
   const password = watch("password", "");
+  const lastName = watch("lastName", "");
+  const firstName = watch("firstName", "");
+
+  const [values, setValues] = React.useState({
+    amount: "",
+    password: "",
+    weight: "",
+    weightRange: "",
+    showPassword: false,
+  });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => {
+    if (!showPassword) {
+      setShowPassword(true);
+    } else {
+      setShowPassword(false);
+    }
+  };
 
   const [validationError, setValidationError] = useState({});
 
-
- 
-  let Login = async () => {
+  let login = async () => {
     try {
       let formData = new FormData();
       formData.append("email", email);
       formData.append("password", password);
-      let res = await axios.post("http://127.0.0.1:8000/api/login/", formData)
-     
+      let res = await axios.post("http://127.0.0.1:8000/api/login/", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       if (res.status === 200) {
         localStorage.setItem("access_token", res.data.token);
-        console.log(res.data.token);
-        navigate(-1);
+
+        navigate("/home", { replace: true });
       }
     } catch (err) {}
   };
-  // //Fonction d'ajout de club
-  // const Login = async (e) => {
-  //  return false;
-
-  //   const formData = new FormData();
-
-  //   formData.append("email", email);
-  //   formData.append("password", password);
-  //   // formData.append("password_confirmation", password_confirmation);
-    
-  //   await axios
-  //     .post(`http://localhost:8000/api/login`, formData)
-     
-  //     .then()
-      
-   
-  //     .catch(({ response }) => {
-  //       if (response.status === 422) {
-  //         setValidationError(response.data.errors);
-  //       }
-  //       if (response.status === 200) {
-  //               localStorage.setItem("access_token", response.data.token);
-        
-  //               navigate(-1);
-  //             }
-  //     });
-    
- 
-
-  // let Login = async () => {
-  //   try {
-  //     let formData = new FormData();
-  //     formData.append("email", email);
-  //     formData.append("password", password);
-  //     let res = await axios.post("http://127.0.0.1:8000/api/login", formData, {
-  //       headers: { "Content-Type": "multipart/form-data" },
-  //     });
-  //     if (res.status === 200) {
-  //       localStorage.setItem("access_token", res.data.token);
-
-  //       // navigate(-1);
-  //     }
-  //   } catch (err) {}
-  // };
 
   return (
     <ThemeProvider theme={theme}>
@@ -117,18 +98,67 @@ export default function Login() {
           <Typography component="h1" variant="h5">
             Se connecter
           </Typography>
-          <Box component="form" noValidate onSubmit={login} sx={{ mt: 3 }}>
+          <Box component="form" noValidate onSubmit={handleSubmit(login)} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  {...register("firstName", {
+                    required: true,
+                    maxLength: {
+                      value: 20,
+                      message: "Longueur maximale de 20 caractères",
+                    },
+                  })}
+                  required
+                  fullWidth
+                  id="firstName"
+                  label="Prénom"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  {...register("lastName", {
+                    required: true,
+                    maxLength: {
+                      value: 20,
+                      message: "Longueur maximale de 20 caractères",
+                    },
+                  })}
+                  required
+                  fullWidth
+                  id="lastName"
+                  label="Nom"
+                  autoFocus
+                />
+              </Grid>
+              {errors.firstName ? (
+                <Alert
+                  className="errorsMessage"
+                  sx={{ mt: 2, p: 0, pl: 2 }}
+                  severity="error"
+                >
+                  {errors.firstName?.message}
+                </Alert>
+              ) : (
+                ""
+              )}
+              {errors.lastName ? (
+                <Alert sx={{ mt: 2, p: 0, pl: 2 }} severity="error">
+                  {errors.lastName?.message}
+                </Alert>
+              ) : (
+                ""
+              )}
 
               <Grid item xs={12}>
                 <TextField
-                {...Login("email", {
-                  required: "Veuillez saisir un email",
-                  pattern: {
-                    value: /^\S+@\S+$/i,
-                    message: "Veuillez saisir un email valide",
-                  },
-                })}
+                  {...register("email", {
+                    required: "Veuillez saisir un email",
+                    pattern: {
+                      value: /^\S+@\S+$/i,
+                      message: "Veuillez saisir un email valide",
+                    },
+                  })}
                   required
                   fullWidth
                   id="email"
@@ -136,46 +166,68 @@ export default function Login() {
                 />
               </Grid>
               {errors.email ? (
-                <Alert sx={{ mt: 2, p: 0, pl: 2 }} severity="error">
+                <Alert
+                  className="errorsMessage"
+                  sx={{ mt: 2, p: 0, pl: 2 }}
+                  severity="error"
+                >
                   {errors.email?.message}
                 </Alert>
               ) : (
                 ""
               )}
 
+              {/* ----------------------------------------------------------------------------------------------- *** PASSWORD *** ------------------------------------------- */}
               <Grid item xs={12}>
-                <TextField
-                  {...Login("password", {
-                    required: "Ce champ est requis",
-                    minLength: {
-                      value: 5,
-                      message: "Longueur minimale de 5 caractères",
-                    },
-                    pattern: {
-                      value:
-                        /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#:$%^&])/,
-                      message:
-                        "Le mot de passe doit contenir une minuscule, une majuscule, un chiffre et un caractère spéciale",
-                    },
-                  })}
-                  required
-                  fullWidth
-                  name="password"
-                  label="Votre mot de passe"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
+                <FormControl sx={{ mt: 1, width: "100%" }} variant="outlined">
+                  <InputLabel htmlFor="outlined-adornment-password">
+                    Password
+                  </InputLabel>
+                  <OutlinedInput
+                    {...register("password", {
+                      required: "Ce champ est requis",
+                      minLength: {
+                        value: 5,
+                        message: "Longueur minimale de 5 caractères",
+                      },
+                      pattern: {
+                        value:
+                          /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#:$%^&])/,
+                        message:
+                          "Le mot de passe doit contenir une minuscule, une majuscule, un chiffre et un caractère spéciale",
+                      },
+                    })}
+                    id="outlined-adornment-password"
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    label="Password"
+                    endAdornment={
+                      <InputAdornment position="end" sx={{ color: "inherit" }}>
+                        <IconButton
+                          color="inherit"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={(e) => e.preventDefault()}
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
               </Grid>
               {errors.password ? (
-                <Alert sx={{ mt: 2, p: 0, pl: 2 }} severity="error">
+                <Alert
+                  className="errorsMessage"
+                  sx={{ mt: 2, p: 0, pl: 2 }}
+                  severity="error"
+                >
                   {errors.password?.message}
                 </Alert>
               ) : (
                 ""
               )}
             </Grid>
-            
+
             <Button
               type="submit"
               fullWidth
@@ -184,7 +236,6 @@ export default function Login() {
             >
               Se connecter
             </Button>
-
 
             <Grid container>
               <Grid item xs>
@@ -198,10 +249,23 @@ export default function Login() {
                 </Link>
               </Grid>
             </Grid>
+
           </Box>
         </Box>
-        
       </Container>
     </ThemeProvider>
   );
 }
+
+<Grid container>
+  <Grid item xs>
+    <Link href="#" variant="body2">
+      Mot de passe oublié ?
+    </Link>
+  </Grid>
+  <Grid item>
+    <Link href="#" variant="body2">
+      {"Pas de compte ? Inscrivez-vous"}
+    </Link>
+  </Grid>
+</Grid>;

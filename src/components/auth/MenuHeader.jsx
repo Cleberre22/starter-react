@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -41,6 +42,23 @@ const ResponsiveAppBar = () => {
   const token = localStorage.getItem("access_token");
   console.log(token);
   const userLogged = !token;
+
+  const [user, setUser] = useState([]);
+  const [role, setRole] = useState([]);
+
+  useEffect(() => {
+    displayUsers();
+  }, []); // Sans les crochets ça tourne en boucle
+  const displayUsers = async () => {
+    await axios.get("http://localhost:8000/api/current-user",{
+      "headers" : { "Authorization":"Bearer"+localStorage.getItem('access_token') }
+      }).then((res) => {
+      setUser(res.data);
+      setRole(res.data.role);
+      // console.log(res.data.role);
+    });
+  };
+  console.log(role);
 
   const removeToken = () => {
     localStorage.removeItem("access_token");
@@ -103,7 +121,8 @@ const ResponsiveAppBar = () => {
               }}
             >
               {/* {pages.map((page) => ( */}
-              <MenuItem onClick={handleCloseNavMenu}>
+              {role === "ADMIN" ? (
+                <MenuItem onClick={handleCloseNavMenu}>
                 <Typography
                   textAlign="center"
                   component="a"
@@ -112,6 +131,18 @@ const ResponsiveAppBar = () => {
                   Dashboard
                 </Typography>
               </MenuItem>
+              ) : (
+                <MenuItem onClick={handleCloseNavMenu}>
+                <Typography
+                  textAlign="center"
+                  component="a"
+                  href="/dashboard/index"
+                >
+                  Dashboardeueueu
+                </Typography>
+              </MenuItem>
+              )}
+             
 
               {userLogged ? (
                 <MenuItem onClick={handleCloseNavMenu}>
